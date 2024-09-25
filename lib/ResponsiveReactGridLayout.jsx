@@ -327,6 +327,7 @@ export default class ResponsiveReactGridLayout extends React.Component<
       onBreakpointChange,
       onLayoutChange,
       onWidthChange,
+      innerInst,
       ...other
     } = this.props;
     /* eslint-enable no-unused-vars */
@@ -343,6 +344,7 @@ export default class ResponsiveReactGridLayout extends React.Component<
         onLayoutChange={this.onLayoutChange}
         layout={this.state.layout}
         cols={this.state.cols}
+        ref={innerInst}
       />
     );
   }
