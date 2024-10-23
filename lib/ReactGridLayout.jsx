@@ -287,9 +287,11 @@ export default class ReactGridLayout extends React.Component<Props, State> {
   ) => {
     const { oldDragItem } = this.state;
     let { layout } = this.state;
-    const { cols, allowOverlap, preventCollision } = this.props;
+    const { cols, allowOverlap, preventCollision, isActiveContainer } = this.props;
     const l = getLayoutItem(layout, i);
     if (!l) return;
+    // DO NOT generate placeholder to avoid changing layout
+    if (typeof isActiveContainer === 'function' && !isActiveContainer()) return;
 
     // Create placeholder (display only)
     const placeholder = {
