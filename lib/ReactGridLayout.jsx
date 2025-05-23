@@ -292,13 +292,22 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     if (!l) return;
     // DO NOT generate placeholder to avoid changing layout
     if (typeof isActiveContainer === 'function' && !isActiveContainer()) return;
-
+    const {
+      width,
+      // height,
+    } = this.props;
+    const height = window.innerHeight || 1117;
+    // return Math.round(Math.round(height * 0.02) / (GAP + 1));
+    const step = {
+      x: Math.round(width * 0.04),
+      y: Math.round(Math.round(height * 0.02) / (16 + 1)),
+    };
     // Create placeholder (display only)
     const placeholder = {
       w: l.w,
       h: l.h,
-      x: l.x,
-      y: l.y,
+      x: Math.round(l.x / step.x) * step.x,
+      y: Math.round(l.y / step.y) * step.y,
       placeholder: true,
       i: i
     };
@@ -491,11 +500,21 @@ export default class ReactGridLayout extends React.Component<Props, State> {
         allowOverlap
       );
     }
+    const {
+      width,
+      // height,
+    } = this.props;
+    const height = window.innerHeight || 1117;
+    // return Math.round(Math.round(height * 0.02) / (GAP + 1));
+    const step = {
+      x: Math.round(width * 0.04),
+      y: Math.round(Math.round(height * 0.02) / (16 + 1)),
+    };
 
     // Create placeholder element (display only)
     const placeholder = {
-      w: l.w,
-      h: l.h,
+      w: Math.round(l.w / step.x) * step.x,
+      h: Math.round(l.h / step.y) * step.y,
       x: l.x,
       y: l.y,
       static: true,
