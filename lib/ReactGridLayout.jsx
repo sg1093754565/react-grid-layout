@@ -306,8 +306,8 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     const placeholder = {
       w: l.w,
       h: l.h,
-      x: Math.round(l.x / step.x) * step.x,
-      y: Math.round(l.y / step.y) * step.y,
+      x: oldDragItem.x + Math.round((l.x - oldDragItem.x) / step.x) * step.x,
+      y: oldDragItem.y + Math.round((l.y - oldDragItem.y) / step.y) * step.y,
       placeholder: true,
       i: i
     };
@@ -513,10 +513,10 @@ export default class ReactGridLayout extends React.Component<Props, State> {
 
     // Create placeholder element (display only)
     const placeholder = {
-      w: Math.round(l.w / step.x) * step.x,
-      h: Math.round(l.h / step.y) * step.y,
-      x: l.x,
-      y: l.y,
+      x: oldResizeItem.x + Math.round((l.x - oldResizeItem.x) / step.x) * step.x,
+      y: oldResizeItem.y + Math.round((l.y - oldResizeItem.y) / step.y) * step.y,
+      w: oldResizeItem.w + Math.round((l.w - oldResizeItem.w) / step.x) * step.x,
+      h: oldResizeItem.h + Math.round((l.h - oldResizeItem.h) / step.y) * step.y,
       static: true,
       i: i
     };
