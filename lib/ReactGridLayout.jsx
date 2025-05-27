@@ -40,6 +40,8 @@ import type {
 
 import type { PositionParams } from "./calculateUtils";
 
+import { dragStep, resizeStep } from "./otherUtils";
+
 type State = {
   activeDrag: ?LayoutItem,
   layout: Layout,
@@ -373,9 +375,17 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     );
 
     // Set state
-    const newLayout = allowOverlap
+    let newLayout = allowOverlap
       ? layout
       : compact(layout, compactType(this.props), cols);
+
+    // 偏移值逻辑写这里，要不然会有问题
+    newLayout = newLayout.map((item: any) => {
+      if (item.i === i) {
+        return dragStep(oldDragItem, item, this.props.width);
+      }
+      return item;
+    });
 
     this.props.onDragStop(newLayout, oldDragItem, l, null, e, node);
 
@@ -543,9 +553,17 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     const l = getLayoutItem(layout, i);
 
     // Set state
-    const newLayout = allowOverlap
+    let newLayout = allowOverlap
       ? layout
       : compact(layout, compactType(this.props), cols);
+
+    // 偏移值逻辑写这里，要不然会有问题
+    newLayout = newLayout.map((item: any) => {
+      if (item.i === i) {
+        return resizeStep(oldResizeItem, item, this.props.width);
+      }
+      return item;
+    });
 
     this.props.onResizeStop(newLayout, oldResizeItem, l, null, e, node);
 
