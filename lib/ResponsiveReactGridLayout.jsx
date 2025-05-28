@@ -331,7 +331,6 @@ export default class ResponsiveReactGridLayout extends React.Component<
       ...other
     } = this.props;
     /* eslint-enable no-unused-vars */
-
     return (
       <ReactGridLayout
         {...other}
