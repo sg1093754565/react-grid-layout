@@ -523,14 +523,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     };
 
     // Create placeholder element (display only)
-    const placeholder = {
-      x: oldResizeItem.x + Math.round((l.x - oldResizeItem.x) / step.x) * step.x,
-      y: oldResizeItem.y + Math.round((l.y - oldResizeItem.y) / step.y) * step.y,
-      w: oldResizeItem.w + Math.round((l.w - oldResizeItem.w) / step.x) * step.x,
-      h: oldResizeItem.h + Math.round((l.h - oldResizeItem.h) / step.y) * step.y,
-      static: true,
-      i: i
-    };
+    const placeholder = getPlaceholderPosition(l, oldResizeItem, step, layout, cols);
 
     this.props.onResize(finalLayout, oldResizeItem, l, placeholder, e, node);
 
