@@ -263,7 +263,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
       placeholder: true,
       i: i
     };
-
+    
     this.setState({
       oldDragItem: cloneLayoutItem(l),
       oldLayout: layout,
@@ -330,7 +330,9 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     );
 
     this.props.onDrag(layout, oldDragItem, l, placeholder, e, node);
-
+    console.log('====> 7', allowOverlap
+        ? layout
+        : compact(layout, compactType(this.props), cols))
     this.setState({
       layout: allowOverlap
         ? layout
@@ -389,6 +391,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     });
 
     const { oldLayout } = this.state;
+    console.log('===> 5', newLayout)
     this.setState({
       activeDrag: null,
       layout: newLayout,
@@ -527,6 +530,9 @@ export default class ReactGridLayout extends React.Component<Props, State> {
 
     this.props.onResize(finalLayout, oldResizeItem, l, placeholder, e, node);
 
+    console.log('===> 1', allowOverlap
+        ? finalLayout
+        : compact(finalLayout, compactType(this.props), cols))
     // Re-compact the newLayout and set the drag placeholder.
     this.setState({
       layout: allowOverlap
@@ -558,7 +564,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
       }
       return item;
     });
-
+    console.log('===> 2', newLayout)
     const { oldLayout } = this.state;
     this.setState({
       activeDrag: null,
@@ -776,7 +782,16 @@ export default class ReactGridLayout extends React.Component<Props, State> {
         finalDroppingItem.w,
         finalDroppingItem.h
       );
-
+      console.log('===> 3', [
+          ...layout,
+          {
+            ...finalDroppingItem,
+            x: calculatedPosition.x,
+            y: calculatedPosition.y,
+            static: false,
+            isDraggable: true
+          }
+        ])
       this.setState({
         droppingDOMNode: <div key={finalDroppingItem.i} />,
         droppingPosition,
@@ -808,9 +823,10 @@ export default class ReactGridLayout extends React.Component<Props, State> {
       layout.filter(l => l.i !== droppingItem.i),
       compactType(this.props),
       cols,
-      this.props.allowOverlap
+      this.props.allowOverlap,
+      true
     );
-
+    console.log('===> 4', newLayout)
     this.setState({
       layout: newLayout,
       droppingDOMNode: null,
