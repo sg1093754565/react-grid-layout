@@ -40,7 +40,7 @@ import type {
 
 import type { PositionParams } from "./calculateUtils";
 
-import { dragStep, resizeStep } from "./otherUtils";
+import { dragStep, resizeStep, getPlaceholderPosition } from "./otherUtils";
 
 type State = {
   activeDrag: ?LayoutItem,
@@ -305,14 +305,15 @@ export default class ReactGridLayout extends React.Component<Props, State> {
       y: Math.round(Math.round(height * 0.02) / (16 + 1)),
     };
     // Create placeholder (display only)
-    const placeholder = {
-      w: l.w,
-      h: l.h,
-      x: oldDragItem.x + Math.round((l.x - oldDragItem.x) / step.x) * step.x,
-      y: oldDragItem.y + Math.round((l.y - oldDragItem.y) / step.y) * step.y,
-      placeholder: true,
-      i: i
-    };
+    const placeholder = getPlaceholderPosition(l, oldDragItem, step, layout, cols)
+    // const placeholder = {
+    //   w: l.w,
+    //   h: l.h,
+    //   x: oldDragItem.x + Math.round((l.x - oldDragItem.x) / step.x) * step.x,
+    //   y: oldDragItem.y + Math.round((l.y - oldDragItem.y) / step.y) * step.y,
+    //   placeholder: true,
+    //   i: i
+    // };
 
     // Move the element to the dragged location.
     const isUserAction = true;
@@ -387,8 +388,6 @@ export default class ReactGridLayout extends React.Component<Props, State> {
       return item;
     });
 
-    this.props.onDragStop(newLayout, oldDragItem, l, null, e, node);
-
     const { oldLayout } = this.state;
     this.setState({
       activeDrag: null,
@@ -396,6 +395,8 @@ export default class ReactGridLayout extends React.Component<Props, State> {
       oldDragItem: null,
       oldLayout: null
     });
+
+    this.props.onDragStop(newLayout, oldDragItem, l, null, e, node);
 
     this.onLayoutMaybeChanged(newLayout, oldLayout);
   };
@@ -565,8 +566,6 @@ export default class ReactGridLayout extends React.Component<Props, State> {
       return item;
     });
 
-    this.props.onResizeStop(newLayout, oldResizeItem, l, null, e, node);
-
     const { oldLayout } = this.state;
     this.setState({
       activeDrag: null,
@@ -575,6 +574,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
       oldLayout: null,
       resizing: false
     });
+    this.props.onResizeStop(newLayout, oldResizeItem, l, null, e, node);
 
     this.onLayoutMaybeChanged(newLayout, oldLayout);
   };
