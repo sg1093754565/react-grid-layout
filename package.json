@@ -1,6 +1,6 @@
 {
   "name": "react-grid-layout-multiple-nested",
-  "version": "1.4.5",
+  "version": "1.4.5-beta.18",
   "description": "A draggable and resizable grid layout with responsive breakpoints, for React.",
   "main": "index.js",
   "scripts": {
