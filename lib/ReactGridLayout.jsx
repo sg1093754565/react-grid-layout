@@ -526,13 +526,9 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     };
 
     // Create placeholder element (display only)
-    const placeholder = getPlaceholderPosition(l, oldResizeItem, step, layout, cols);
+    const placeholder = getPlaceholderPosition(l, oldResizeItem, step, layout, cols, true);
 
     this.props.onResize(finalLayout, oldResizeItem, l, placeholder, e, node);
-
-    console.log('===> 1', allowOverlap
-        ? finalLayout
-        : compact(finalLayout, compactType(this.props), cols))
     // Re-compact the newLayout and set the drag placeholder.
     this.setState({
       layout: allowOverlap
