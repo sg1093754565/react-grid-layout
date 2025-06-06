@@ -301,7 +301,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     const height = window.innerHeight || 1117;
     // return Math.round(Math.round(height * 0.02) / (GAP + 1));
     const step = {
-      x: Math.round(width * 0.0417),
+      x: (width - 6)  / 24,
       y: Math.round(Math.round(height * 0.02) / (16 + 1)),
     };
     // Create placeholder (display only)
@@ -521,7 +521,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     const height = window.innerHeight || 1117;
     // return Math.round(Math.round(height * 0.02) / (GAP + 1));
     const step = {
-      x: Math.round(width * 0.0417),
+      x: (width - 6) / 24,
       y: Math.round(Math.round(height * 0.02) / (16 + 1)),
     };
 
@@ -533,7 +533,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     this.setState({
       layout: allowOverlap
         ? finalLayout
-        : compact(finalLayout, compactType(this.props), cols),
+        : compact(finalLayout, compactType(this.props), cols, undefined, false),
       activeDrag: placeholder
     });
   };
@@ -560,7 +560,6 @@ export default class ReactGridLayout extends React.Component<Props, State> {
       }
       return item;
     });
-    console.log('===> 2', newLayout)
     const { oldLayout } = this.state;
     this.setState({
       activeDrag: null,
