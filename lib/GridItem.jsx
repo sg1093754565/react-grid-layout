@@ -505,7 +505,7 @@ export default class GridItem extends React.Component<Props, State> {
       if (offsetParent) {
         const { margin, rowHeight, containerPadding } = this.props;
         const bottomBoundary =
-          offsetParent.clientHeight - calcGridItemWHPx(h, rowHeight, margin[1]);
+          offsetParent.clientHeight - calcGridItemWHPx(h, rowHeight, margin[1], true);
         top = clamp(top - containerPadding[1], 0, bottomBoundary);
 
         const colWidth = calcGridColWidth(positionParams);
@@ -636,7 +636,6 @@ export default class GridItem extends React.Component<Props, State> {
       this.state
     );
     const child = React.Children.only(this.props.children);
-
     // Create the child element. We clone the existing element but modify its className and style.
     let newChild = React.cloneElement(child, {
       ref: this.elementRef,
