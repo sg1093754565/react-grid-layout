@@ -316,14 +316,15 @@ export default class ReactGridLayout extends React.Component<Props, State> {
       preventCollision,
       compactType(this.props),
       cols,
-      allowOverlap
+      allowOverlap,
+      'drag'
     );
 
     this.props.onDrag(layout, oldDragItem, l, placeholder, e, node);
     this.setState({
       layout: allowOverlap
         ? layout
-        : compact(layout, compactType(this.props), cols, undefined, 'strict'),
+        : compact(layout, compactType(this.props), cols, undefined, 'drag'),
       activeDrag: placeholder
     });
   };
@@ -378,7 +379,6 @@ export default class ReactGridLayout extends React.Component<Props, State> {
         : compact(newLayout, compactType(this.props), cols);
 
     const { oldLayout } = this.state;
-    console.log('===> 5', newLayout)
     this.setState({
       activeDrag: null,
       layout: newLayout,
@@ -432,7 +432,6 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     let finalLayout;
     let x;
     let y;
-
     const [newLayout, l] = withLayoutItem(layout, i, l => {
       let hasCollisions;
       x = l.x;
@@ -614,6 +613,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     if (!l) return null;
     const {
       width,
+      height,
       cols,
       margin,
       containerPadding,
@@ -646,10 +646,10 @@ export default class ReactGridLayout extends React.Component<Props, State> {
 
     // isBounded set on child if set on parent, and child is not explicitly false
     const bounded = draggable && isBounded && l.isBounded !== false;
-
     return (
       <GridItem
         containerWidth={width}
+        containerHeight={height}
         cols={cols}
         margin={margin}
         containerPadding={containerPadding || margin}
