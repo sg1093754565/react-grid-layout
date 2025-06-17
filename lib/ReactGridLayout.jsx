@@ -317,14 +317,13 @@ export default class ReactGridLayout extends React.Component<Props, State> {
       compactType(this.props),
       cols,
       allowOverlap,
-      'drag'
     );
 
     this.props.onDrag(layout, oldDragItem, l, placeholder, e, node);
     this.setState({
       layout: allowOverlap
         ? layout
-        : compact(layout, compactType(this.props), cols, undefined, 'drag'),
+        : compact(layout, compactType(this.props), cols, undefined, 'resize'),
       activeDrag: placeholder
     });
   };

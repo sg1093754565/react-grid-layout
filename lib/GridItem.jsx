@@ -1,6 +1,5 @@
 // @flow
 import React from "react";
-import _ from 'lodash';
 import PropTypes from "prop-types";
 import { DraggableCore } from "react-draggable";
 import { Resizable } from "react-resizable";
@@ -572,9 +571,7 @@ export default class GridItem extends React.Component<Props, State> {
 
   // onResize event handler
   onResize: GridItemResizeCallback = (e, callbackData, position) => {
-    _.throttle(() => {
-      this.onResizeHandler(e, callbackData, position, "onResize");
-    }, 50)
+    this.onResizeHandler(e, callbackData, position, "onResize");
   }
 
   /**
