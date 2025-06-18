@@ -129,7 +129,8 @@ export default class ReactGridLayout extends React.Component<Props, State> {
       this.props.cols,
       // Legacy support for verticalCompact: false
       compactType(this.props),
-      this.props.allowOverlap
+      this.props.allowOverlap,
+      this.props.step
     ),
     mounted: false,
     oldDragItem: null,
@@ -180,7 +181,8 @@ export default class ReactGridLayout extends React.Component<Props, State> {
         nextProps.children,
         nextProps.cols,
         compactType(nextProps),
-        nextProps.allowOverlap
+        nextProps.allowOverlap,
+        nextProps.step,
       );
 
       return {
@@ -317,13 +319,15 @@ export default class ReactGridLayout extends React.Component<Props, State> {
       compactType(this.props),
       cols,
       allowOverlap,
+      'drag',
+      step,
     );
 
     this.props.onDrag(layout, oldDragItem, l, placeholder, e, node);
     this.setState({
       layout: allowOverlap
         ? layout
-        : compact(layout, compactType(this.props), cols, undefined, 'resize'),
+        : compact(layout, compactType(this.props), cols, undefined, step, 'resize'),
       activeDrag: placeholder
     });
   };
@@ -346,7 +350,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
 
     const { oldDragItem } = this.state;
     let { layout } = this.state;
-    const { cols, preventCollision, allowOverlap } = this.props;
+    const { cols, preventCollision, allowOverlap, step } = this.props;
     const l = getLayoutItem(layout, i);
     if (!l) return;
 
@@ -361,7 +365,9 @@ export default class ReactGridLayout extends React.Component<Props, State> {
       preventCollision,
       compactType(this.props),
       cols,
-      allowOverlap
+      allowOverlap,
+      'drag',
+      step
     );
 
     // Set state
@@ -375,7 +381,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
 
     newLayout = allowOverlap
         ? newLayout
-        : compact(newLayout, compactType(this.props), cols);
+        : compact(newLayout, compactType(this.props), cols, undefined, step);
 
     const { oldLayout } = this.state;
     this.setState({
@@ -425,8 +431,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
   ) => {
     const { oldResizeItem } = this.state;
     const { layout } = this.state;
-    const { cols, preventCollision, allowOverlap } = this.props;
-
+    const { cols, preventCollision, allowOverlap, step } = this.props;
     let shouldMoveItem = false;
     let finalLayout;
     let x;
@@ -460,7 +465,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
           h,
           x,
           y
-        }).filter(layoutItem => layoutItem.i !== l.i);
+        }, step).filter(layoutItem => layoutItem.i !== l.i);
         hasCollisions = collisions.length > 0;
 
         // If we're colliding, we need adjust the placeholder.
@@ -496,13 +501,11 @@ export default class ReactGridLayout extends React.Component<Props, State> {
         this.props.preventCollision,
         compactType(this.props),
         cols,
-        allowOverlap
+        allowOverlap,
+        'drag',
+        step,
       );
     }
-    const {
-      step,
-      // height,
-    } = this.props;
     // return Math.round(Math.round(height * 0.02) / (GAP + 1));
 
     // Create placeholder element (display only)
@@ -513,7 +516,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     this.setState({
       layout: allowOverlap
         ? finalLayout
-        : compact(finalLayout, compactType(this.props), cols, undefined, 'resize'),
+        : compact(finalLayout, compactType(this.props), cols, undefined, step, 'resize'),
       activeDrag: placeholder
     });
   };
@@ -525,7 +528,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     { e, node }
   ) => {
     const { layout, oldResizeItem } = this.state;
-    const { cols, allowOverlap } = this.props;
+    const { cols, allowOverlap, step } = this.props;
     const l = getLayoutItem(layout, i);
 
     // 偏移值逻辑写这里，要不然会有问题
@@ -537,7 +540,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     });
     newLayout = allowOverlap
       ? newLayout
-      : compact(newLayout, compactType(this.props), cols);
+      : compact(newLayout, compactType(this.props), cols, undefined, step);
 
     const { oldLayout } = this.state;
     this.setState({
@@ -781,7 +784,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
   };
 
   removeDroppingPlaceholder: () => void = () => {
-    const { droppingItem, cols } = this.props;
+    const { droppingItem, cols, step } = this.props;
     const { layout } = this.state;
 
     const newLayout = compact(
@@ -789,6 +792,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
       compactType(this.props),
       cols,
       this.props.allowOverlap,
+      step,
       'strict'
     );
     this.setState({

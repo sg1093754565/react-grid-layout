@@ -175,7 +175,7 @@ export default class ResponsiveReactGridLayout extends React.Component<
   state: State = this.generateInitialState();
 
   generateInitialState(): State {
-    const { width, breakpoints, layouts, cols } = this.props;
+    const { width, breakpoints, layouts, cols, step } = this.props;
     const breakpoint = getBreakpointFromWidth(breakpoints, width);
     const colNo = getColsFromBreakpoint(breakpoint, cols);
     // verticalCompact compatibility, now deprecated
@@ -189,7 +189,8 @@ export default class ResponsiveReactGridLayout extends React.Component<
       breakpoint,
       breakpoint,
       colNo,
-      compactType
+      compactType,
+      step
     );
 
     return {
@@ -205,7 +206,7 @@ export default class ResponsiveReactGridLayout extends React.Component<
   ): ?$Shape<State> {
     if (!deepEqual(nextProps.layouts, prevState.layouts)) {
       // Allow parent to set layouts directly.
-      const { breakpoint, cols } = prevState;
+      const { breakpoint, cols, step } = prevState;
 
       // Since we're setting an entirely new layout object, we must generate a new responsive layout
       // if one does not exist.
@@ -215,7 +216,8 @@ export default class ResponsiveReactGridLayout extends React.Component<
         breakpoint,
         breakpoint,
         cols,
-        nextProps.compactType
+        nextProps.compactType,
+        step
       );
       return { layout: newLayout, layouts: nextProps.layouts };
     }
@@ -248,7 +250,7 @@ export default class ResponsiveReactGridLayout extends React.Component<
    * Width changes are necessary to figure out the widget widths.
    */
   onWidthChange(prevProps: Props<*>) {
-    const { breakpoints, cols, layouts, compactType } = this.props;
+    const { breakpoints, cols, layouts, compactType, step } = this.props;
     const newBreakpoint =
       this.props.breakpoint ||
       getBreakpointFromWidth(this.props.breakpoints, this.props.width);
@@ -274,7 +276,8 @@ export default class ResponsiveReactGridLayout extends React.Component<
         newBreakpoint,
         lastBreakpoint,
         newCols,
-        compactType
+        compactType,
+        step,
       );
 
       // This adds missing items.
@@ -283,7 +286,8 @@ export default class ResponsiveReactGridLayout extends React.Component<
         this.props.children,
         newCols,
         compactType,
-        this.props.allowOverlap
+        this.props.allowOverlap,
+        this.props.step
       );
 
       // Store the new layout.
