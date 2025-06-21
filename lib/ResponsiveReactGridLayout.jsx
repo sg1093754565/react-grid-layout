@@ -346,7 +346,7 @@ export default class ResponsiveReactGridLayout extends React.Component<
         )}
         onLayoutChange={this.onLayoutChange}
         layout={this.state.layout}
-        cols={this.state.cols}
+        cols={this.props.cols.xxs}
         ref={innerInst}
       />
     );
